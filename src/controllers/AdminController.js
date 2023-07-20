@@ -1,5 +1,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const GV = require('../globalvariable');
 
 class AdminController {
   async craw(req, res, next) {
@@ -9,7 +10,7 @@ class AdminController {
         `https://online.hcmue.edu.vn/Portlets/UIS_MySpace/Student/Informations/StudentInfo.aspx?StudentID=${mssv}`,
         {
           headers: {
-            Cookie: `ASP.NET_SessionId=${process.env.NET_SessionId}; BNI_persistence=${process.env.BNI_persistence}; BNES_ASP.NET_SessionId=${process.env.BNES_ASP}`,
+            Cookie: `ASP.NET_SessionId=${GV.NET_SessionId}; BNI_persistence=${GV.BNI_persistence}; BNES_ASP.NET_SessionId=${GV.BNES_ASP}`,
           },
         },
       );
@@ -60,9 +61,9 @@ class AdminController {
       cookieArr1[2].indexOf('=') + 1,
       cookieArr1[2].indexOf(';'),
     );
-    process.env.NET_SessionId = cookie11;
-    process.env.BNI_persistence = cookie12;
-    process.env.BNES_ASP = cookie13;
+    GV.NET_SessionId = cookie11;
+    GV.BNI_persistence = cookie12;
+    GV.BNES_ASP = cookie13;
 
     /////////////////////////////////////////////////////
     const response2 = await axios.post(
@@ -77,7 +78,7 @@ class AdminController {
       {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Cookie: `ASP.NET_SessionId=${process.env.NET_SessionId}; BNI_persistence=${process.env.BNI_persistence}; BNES_ASP.NET_SessionId=${process.env.BNES_ASP}`,
+          Cookie: `ASP.NET_SessionId=${GV.NET_SessionId}; BNI_persistence=${GV.BNI_persistence}; BNES_ASP.NET_SessionId=${GV.BNES_ASP}`,
         },
       },
     );
@@ -103,7 +104,7 @@ class AdminController {
       {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Cookie: `ASP.NET_SessionId=${process.env.NET_SessionId}; BNI_persistence=${process.env.BNI_persistence}; BNES_ASP.NET_SessionId=${process.env.BNES_ASP}`,
+          Cookie: `ASP.NET_SessionId=${GV.NET_SessionId}; BNI_persistence=${GV.BNI_persistence}; BNES_ASP.NET_SessionId=${GV.BNES_ASP}`,
         },
       },
     );
@@ -128,10 +129,9 @@ class AdminController {
     console.log(cookie31);
     console.log(cookie32);
     console.log(cookie33);
-    process.env.NET_SessionId = cookie31;
-    process.env.BNI_persistence = cookie32;
-    process.env.BNES_ASP = cookie33;
-
+    GV.NET_SessionId = cookie31;
+    GV.BNI_persistence = cookie32;
+    GV.BNES_ASP = cookie33;
     res.redirect('/admin');
   }
 
