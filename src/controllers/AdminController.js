@@ -29,7 +29,8 @@ class AdminController {
         'http://192.168.100.116/hinhsv/K46/46.01.104.196.jpg',
       ); */
       const bodyHTML = html('body').html();
-      res.render('admin', { bodyHtml: bodyHTML });
+      //res.render('admin', { bodyHtml: bodyHTML });
+      res.render('admin.ejs', { bodyHtml: bodyHTML });
     } catch (error) {
       if (error.response.status == 404) {
         res.redirect('/admin/login');
@@ -42,7 +43,8 @@ class AdminController {
   }
 
   async loginview(req, res, next) {
-    res.render('login');
+    //res.render('login');
+    res.render('login.ejs');
   }
 
   async logincookie(req, res) {
@@ -150,7 +152,7 @@ class AdminController {
   }
 
   index(req, res, next) {
-    res.render('admin', { bodyHtml: '' });
+    res.render('admin.ejs', { bodyHtml: '' });
   }
 }
 
