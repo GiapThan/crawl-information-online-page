@@ -1,20 +1,45 @@
-<div class='mt-5'>
-  <h3>Đăng nhập tài khoản trang online.hcmue.edu.vn</h3>
-  <form
-    action='/admin/login/post'
-    method='POST'
-    class='mt-4'
-    style='width: 50%;'
-  >
-    <div class='input-group input-group-sm mb-3'>
-      <span class='input-group-text' id='inputGroup-sizing-sm'>Mã Số Sinh Viên</span>
-      <input type='text' name='mssv' class='form-control' />
-    </div>
+<div class='row'>
 
-    <div class='input-group mb-3'>
-      <span class='input-group-text' id='inputGroup-sizing-default'>Mật Khẩu</span>
-      <input type='password' name='password' class='form-control' />
-    </div>
-    <button class='btn btn-primary' type='submit'>Đăng nhập</button>
-  </form>
+  <div class='mt-5 col-2' style='width: 50%;'>
+    <h3>Đăng nhập tài khoản trang online.hcmue.edu.vn</h3>
+    <form action='/admin/login/post' method='POST' class='mt-4'>
+      <div class='input-group input-group-sm mb-3'>
+        <span class='input-group-text' id='inputGroup-sizing-sm'>Mã Số Sinh Viên</span>
+        <input type='text' name='mssv' class='form-control' />
+      </div>
+
+      <div class='input-group mb-3'>
+        <span class='input-group-text' id='inputGroup-sizing-default'>Mật Khẩu</span>
+        <input type='password' name='password' class='form-control' />
+      </div>
+      <button class='btn btn-primary' type='submit'>Đăng nhập</button>
+    </form>
+  </div>
+  <div class='mt-5 col-2' style='width: 50%;'>
+    <h3>Sử dụng Cookie từ trang online</h3>
+    <form action='/admin/login/cookie' method='post' class='mt-4'>
+      <div class='input-group mb-3'>
+        <span
+          class='input-group-text'
+          id='inputGroup-sizing-default'
+        >BNES_ASP.NET_SessionId</span>
+        <input type='password' name='BNES_ASP' class='form-control' />
+      </div>
+      <div class='input-group mb-3'>
+        <span
+          class='input-group-text'
+          id='inputGroup-sizing-default'
+        >BNI_persistence</span>
+        <input type='password' name='BNI_persistence' class='form-control' />
+      </div>
+      <div class='input-group mb-3'>
+        <span
+          class='input-group-text'
+          id='inputGroup-sizing-default'
+        >ASP.NET_SessionId</span>
+        <input type='password' name='NET_SessionId' class='form-control' />
+      </div>
+      <button class='btn btn-primary' type='submit'>Đăng nhập</button>
+    </form>
+  </div>
 </div>

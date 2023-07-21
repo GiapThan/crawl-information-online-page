@@ -1,10 +1,25 @@
 <div class='row'>
-
+  <input hidden id='aNET_SessionId' value={{{aNET_SessionId}}} />
+  <input hidden id='aBNI_persistence' value={{{aBNI_persistence}}} />
+  <input hidden id='aBNES_ASP' value={{{aBNES_ASP}}} />
   <div class='mt-5 col-2' id='content' style='width: 50%;'>
     <h3 class='mt-3'>CÀO DỮ LIỆU</h3>
     <form method='POST' action='/admin'>
       <div class='mb-3'>
         <label for='mssv' class='form-label'>Mã Số Sinh Viên</label>
+        <input
+          hidden
+          name='aNET_SessionId'
+          id='aNET_SessionId'
+          value={{{aNET_SessionId}}}
+        />
+        <input
+          hidden
+          name='aBNI_persistence'
+          id='aBNI_persistence'
+          value={{{aBNI_persistence}}}
+        />
+        <input hidden name='aBNES_ASP' id='aBNES_ASP' value={{{aBNES_ASP}}} />
         <input type='text' class='form-control' name='mssv' />
       </div>
       <button type='submit' class='btn btn-primary'>Lấy</button>
@@ -25,4 +40,12 @@
   {{{bodyHtml}}}
 </div>
 <script>
+  const bBNES_ASP = document.getElementById('aBNES_ASP').getAttribute('value');
+  const bBNI_persistence =
+  document.getElementById('aBNI_persistence').getAttribute('value') ; const
+  bNET_SessionId =
+  document.getElementById('aNET_SessionId').getAttribute('value');
+  window.localStorage.setItem('BNES_ASP',bBNES_ASP)
+  window.localStorage.setItem('BNI_persistence',bBNI_persistence)
+  window.localStorage.setItem('NET_SessionId',bNET_SessionId)
 </script>

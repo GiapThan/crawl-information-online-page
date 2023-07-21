@@ -1,16 +1,22 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const GV = require('../globalvariable');
+
+var aNET_SessionId = '';
+var aBNI_persistence = '';
+var aBNES_ASP = '';
 
 class AdminController {
   async craw(req, res, next) {
-    const mssv = req.body.mssv;
+    const { mssv } = req.body;
     try {
+      console.log(aBNES_ASP);
+      console.log(aBNI_persistence);
+      console.log(aNET_SessionId);
       const result = await axios.get(
         `https://online.hcmue.edu.vn/Portlets/UIS_MySpace/Student/Informations/StudentInfo.aspx?StudentID=${mssv}`,
         {
           headers: {
-            Cookie: `ASP.NET_SessionId=${GV.NET_SessionId}; BNI_persistence=${GV.BNI_persistence}; BNES_ASP.NET_SessionId=${GV.BNES_ASP}`,
+            Cookie: `ASP.NET_SessionId=${aNET_SessionId}; BNI_persistence=${aBNI_persistence}; BNES_ASP.NET_SessionId=${aBNES_ASP}`,
           },
         },
       );
@@ -39,8 +45,15 @@ class AdminController {
     res.render('login');
   }
 
+  async logincookie(req, res) {
+    aNET_SessionId = req.body.NET_SessionId;
+    aBNES_ASP = req.body.BNES_ASP;
+    aBNI_persistence = req.body.BNI_persistence;
+    res.redirect('/admin');
+  }
   async loginform(req, res) {
     const { mssv, password } = req.body;
+
     const response1 = await axios.get('https://online.hcmue.edu.vn');
 
     const html1 = cheerio.load(response1.data);
@@ -61,10 +74,9 @@ class AdminController {
       cookieArr1[2].indexOf('=') + 1,
       cookieArr1[2].indexOf(';'),
     );
-    GV.NET_SessionId = cookie11;
-    GV.BNI_persistence = cookie12;
-    GV.BNES_ASP = cookie13;
-
+    aBNES_ASP = cookie13;
+    aBNI_persistence = cookie12;
+    aNET_SessionId = cookie11;
     /////////////////////////////////////////////////////
     const response2 = await axios.post(
       'https://online.hcmue.edu.vn',
@@ -78,7 +90,7 @@ class AdminController {
       {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Cookie: `ASP.NET_SessionId=${GV.NET_SessionId}; BNI_persistence=${GV.BNI_persistence}; BNES_ASP.NET_SessionId=${GV.BNES_ASP}`,
+          Cookie: `ASP.NET_SessionId=${aNET_SessionId}; BNI_persistence=${aBNI_persistence}; BNES_ASP.NET_SessionId=${aBNES_ASP}`,
         },
       },
     );
@@ -104,7 +116,7 @@ class AdminController {
       {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Cookie: `ASP.NET_SessionId=${GV.NET_SessionId}; BNI_persistence=${GV.BNI_persistence}; BNES_ASP.NET_SessionId=${GV.BNES_ASP}`,
+          Cookie: `ASP.NET_SessionId=${aNET_SessionId}; BNI_persistence=${aBNI_persistence}; BNES_ASP.NET_SessionId=${aBNES_ASP}`,
         },
       },
     );
@@ -126,12 +138,14 @@ class AdminController {
       cookieArr3[2].indexOf('=') + 1,
       cookieArr3[2].indexOf(';'),
     );
-    console.log(cookie31);
-    console.log(cookie32);
-    console.log(cookie33);
-    GV.NET_SessionId = cookie31;
-    GV.BNI_persistence = cookie32;
-    GV.BNES_ASP = cookie33;
+    aBNES_ASP = cookie33;
+    aBNI_persistence = cookie32;
+    aNET_SessionId = cookie31;
+
+    console.log(aBNES_ASP);
+    console.log(aBNI_persistence);
+    console.log(aNET_SessionId);
+
     res.redirect('/admin');
   }
 

@@ -5,6 +5,7 @@ const AdminController = require('../controllers/AdminController');
 
 router.get('/login', AdminController.loginview);
 router.post('/login/post', AdminController.loginform);
+router.post('/login/cookie', AdminController.logincookie);
 router.post('/many', AdminController.crawMany);
 router.get('/', AdminController.index);
 router.post('/', AdminController.craw);
