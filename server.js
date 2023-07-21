@@ -1,9 +1,8 @@
 const express = require('express');
 require('dotenv').config();
+const { engine } = require('express-handlebars');
 
 const app = express();
-
-const handlebars = require('express-handlebars');
 
 const route = require('./src/routes');
 
@@ -15,7 +14,7 @@ app.use(
 );
 app.use(express.json());
 
-app.engine('handlebars', handlebars.engine());
+app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.set('views', 'src/resources/views');
 
