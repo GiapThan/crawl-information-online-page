@@ -1,47 +1,14 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const fs = require('fs');
+const XLSX = require('xlsx');
+const Process = require('../utils/process');
 
 var aNET_SessionId = '';
 var aBNI_persistence = '';
 var aBNES_ASP = '';
 
 class AdminController {
-  async craw(req, res, next) {
-    const { mssv } = req.body;
-    try {
-      console.log(aBNES_ASP);
-      console.log(aBNI_persistence);
-      console.log(aNET_SessionId);
-      const result = await axios.get(
-        `https://online.hcmue.edu.vn/Portlets/UIS_MySpace/Student/Informations/StudentInfo.aspx?StudentID=${mssv}`,
-        {
-          headers: {
-            Cookie: `ASP.NET_SessionId=${aNET_SessionId}; BNI_persistence=${aBNI_persistence}; BNES_ASP.NET_SessionId=${aBNES_ASP}`,
-          },
-        },
-      );
-      const html = cheerio.load(result.data);
-      html('#imgBanner').remove();
-      html('#__VIEWSTATEGENERATOR').remove();
-      html('#__VIEWSTATE').remove();
-      /* html('#imgStudents').attr(
-        'src',
-        'http://192.168.100.116/hinhsv/K46/46.01.104.196.jpg',
-      ); */
-      const bodyHTML = html('body').html();
-      //res.render('admin', { bodyHtml: bodyHTML });
-      res.render('admin.ejs', { bodyHtml: bodyHTML });
-    } catch (error) {
-      if (error.response.status == 404) {
-        res.redirect('/admin/login');
-      }
-    }
-  }
-
-  async crawMany(req, res, next) {
-    console.log(req.body);
-  }
-
   async loginview(req, res, next) {
     //res.render('login');
     res.render('login.ejs');
@@ -53,6 +20,7 @@ class AdminController {
     aBNI_persistence = req.body.BNI_persistence;
     res.redirect('/admin');
   }
+
   async loginform(req, res) {
     const { mssv, password } = req.body;
 
@@ -150,6 +118,80 @@ class AdminController {
 
     res.redirect('/admin');
   }
+
+  async craw(req, res, next) {
+    const { mssv } = req.body;
+    try {
+      let resultHTML = await Process.crawInfor({
+        mssv,
+        aNET_SessionId,
+        aBNES_ASP,
+        aBNI_persistence,
+      });
+      res.render('admin.ejs', { bodyHtml: resultHTML });
+    } catch (error) {
+      res.redirect('/admin/login');
+    }
+  }
+
+  async crawMany(req, res, next) {
+    const StartCrawMany = async (nameFileMSSV) => {
+      const data = XLSX.readFile('./src/public/' + nameFileMSSV);
+      const sheetName = data.SheetNames[0];
+
+      const listMSSV = data.Sheets[sheetName];
+      let arrKeys = Object.keys(listMSSV);
+      arrKeys = arrKeys.slice(1, arrKeys.length - 1);
+
+      var wb = XLSX.utils.book_new();
+      var down = './src/public/result.xlsx';
+      var ketqua = [['MSSV', 'Họ và tên', 'Ngày sinh', 'CCCD/CMND']];
+
+      for (let i = 0; i < arrKeys.length; i++) {
+        try {
+          const result = await Process.crawInfor({
+            mssv: listMSSV[arrKeys[i]].v,
+            aBNES_ASP,
+            aBNI_persistence,
+            aNET_SessionId,
+            type: 'many',
+          });
+          ketqua.push([
+            listMSSV[arrKeys[i]].v,
+            result.name,
+            result.ngaySinh,
+            result.CCCD,
+          ]);
+        } catch (error) {
+          console.log(listMSSV[arrKeys[i]].v);
+          var ws = XLSX.utils.aoa_to_sheet(ketqua);
+          XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
+          XLSX.writeFile(wb, down);
+          return res.download(down);
+        }
+      }
+
+      var ws = XLSX.utils.aoa_to_sheet(ketqua);
+      XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
+      XLSX.writeFile(wb, down);
+      return res.download(down);
+    };
+
+    const fileMSSV = req.files.mssvs;
+    fileMSSV.mv('./src/public/' + fileMSSV.name, (err) => {
+      if (err) {
+        res.redirect('back');
+      } else {
+        StartCrawMany(fileMSSV.name);
+      }
+    });
+  }
+
+  async hocTap(req, res) {
+    await Process.crawScore({ mssv: '1234' });
+  }
+
+  async hocTapMany(req, res) {}
 
   index(req, res, next) {
     res.render('admin.ejs', { bodyHtml: '' });

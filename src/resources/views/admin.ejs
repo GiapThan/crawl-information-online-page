@@ -56,17 +56,17 @@
       <div class="container">
         <div class="row">
           <div class="mt-5 col-2" id="content" style="width: 50%">
-            <h3 class="mt-3">CÀO DỮ LIỆU</h3>
+            <h3 class="mt-3">LẤY DỮ LIỆU SINH VIÊN HCMUE</h3>
             <form method="POST" action="/admin">
               <div class="mb-3">
                 <label for="mssv" class="form-label">Mã Số Sinh Viên</label>
-                <input type="text" class="form-control" name="mssv" />
+                <input required type="text" class="form-control" name="mssv" />
               </div>
               <button type="submit" class="btn btn-primary">Lấy</button>
             </form>
           </div>
           <div class="mt-5 col-2" id="content" style="width: 50%">
-            <h3 class="mt-3">CÀO HÀNG LOẠT</h3>
+            <h3 class="mt-3">LẤY HÀNG LOẠT</h3>
             <form
               method="POST"
               enctype="multipart/form-data"
@@ -77,6 +77,7 @@
                   >Danh Sách Mã Số Sinh Viên (*.xlsx)</label
                 >
                 <input
+                  required
                   type="file"
                   accept=".xlsx"
                   class="form-control"

@@ -1,5 +1,6 @@
 const express = require('express');
 require('dotenv').config();
+const fileUploader = require('express-fileupload');
 //const { engine } = require('express-handlebars');
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json());
 //app.set('view engine', 'handlebars');
 app.set('view engine', 'ejs');
 app.set('views', 'src/resources/views');
+app.use(fileUploader());
 
 route(app);
 
